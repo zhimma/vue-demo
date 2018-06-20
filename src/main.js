@@ -6,10 +6,11 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 import Config from './config';
+import Http from './until/http'
 Vue.prototype.$Config = Config;
+Vue.use(ElementUI);
+Vue.use(Http);
 
-Vue.config.productionTip = false
-Vue.use(ElementUI)
 
 
 router.beforeEach((to, from, next) => {
@@ -20,10 +21,9 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-/* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: {App},
+    template: '<App/>'
 })
