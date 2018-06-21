@@ -31,6 +31,7 @@
     </div>
 </template>
 <script>
+    import * as request from "../../servers/request";
     export default {
         name: 'login',
         data() {
@@ -78,10 +79,18 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/auth/login')
+                        const data = {
+                            name: this.loginForm.account,
+                            password: this.loginForm.password,
+                        }
+                        this.$http.post('login', data)
                             .then((response) => {
-                                console.log(response)
+                                if (response.status == 200 && response.data.success == true) {
+                                    sessionStorage.setItem(this.$Config.tokenKey, response.headers.authorization);
+                                    this.$router.push({path:'/'})
+                                }
                             })
+
                     } else {
                         console.log('error submit!!');
                         return false;
