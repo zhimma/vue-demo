@@ -26,8 +26,8 @@ instance.interceptors.request.use(
 
         // 若是有做鉴权token , 就给头部带上token
         // 若是需要跨站点,存放到 cookie 会好一点,限制也没那么多,有些浏览环境限制了 localstorage 的使用
-        if (localStorage.token) {
-            config.headers.Authorization = localStorage.token;
+        if (sessionStorage.Authorization) {
+            config.headers.Authorization = sessionStorage.Authorization;
         }
         return config;
     },
@@ -62,8 +62,8 @@ instance.interceptors.response.use(
     },
     error => {
         // 用户登录的时候会拿到一个基础信息,比如用户名,token,过期时间戳
-        // 直接丢localStorage或者sessionStorage
-        if (!window.localStorage.getItem("loginUserBaseInfo")) {
+        // 直接丢sessionStorage或者sessionStorage
+        if (!window.sessionStorage.getItem("loginUserBaseInfo")) {
             // 若是接口访问的时候没有发现有鉴权的基础信息,直接返回登录页
             router.push({
                 path: "/login"
@@ -72,7 +72,7 @@ instance.interceptors.response.use(
             // 若是有基础信息的情况下,判断时间戳和当前的时间,若是当前的时间大于服务器过期的时间
             // 乖乖的返回去登录页重新登录
             let lifeTime =
-                JSON.parse(window.localStorage.getItem("loginUserBaseInfo")).lifeTime *
+                JSON.parse(window.sessionStorage.getItem("loginUserBaseInfo")).lifeTime *
                 1000;
             let nowTime = new Date().getTime(); // 当前时间的时间戳
             console.log(nowTime, lifeTime);

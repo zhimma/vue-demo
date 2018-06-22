@@ -84,9 +84,13 @@
 </script>
 
 <style>
+    .el-main {
+        min-width: 960px;
+    }
     .el-header {
         padding: 0 0;
     }
+
     .el-header .el-menu-item  {
         border-bottom: 2px solid #409EFF;
         float: right;
@@ -123,9 +127,8 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-    .search_div {
+    .p-b-50 {
         height: 50px;
-        width: 100%;
         font-size: 12px;
         padding-bottom: 10px;
     }
