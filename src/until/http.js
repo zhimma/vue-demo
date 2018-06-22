@@ -47,15 +47,15 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     res => {
         //对响应数据做些事
-        if (res.data && !res.data.success) {
-            Message({
+        if (res.status != 200) {
+           /* Message({
                 //  饿了么的消息弹窗组件,类似toast
                 showClose: true,
                 message: res.data.error.message.message
                     ? res.data.error.message.message
                     : res.data.error.message,
                 type: "error"
-            });
+            });*/
             return Promise.reject(res.data.error.message);
         }
         return res;
@@ -119,7 +119,7 @@ instance.interceptors.response.use(
 // 对axios的实例重新封装成一个plugin ,方便 Vue.use(xxxx)
 export default {
     install: function (Vue, Option) {
-        Object.defineProperty(Vue.prototype, "$http", {value: instance });
+        Object.defineProperty(Vue.prototype, "$http", {value: instance});
     }
 };
 

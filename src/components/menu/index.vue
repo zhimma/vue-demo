@@ -107,7 +107,7 @@
                 this.visibleStatus = true;
             },
         },
-        created() {
+        mounted() {
             this.getMenus();
         }
     }

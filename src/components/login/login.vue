@@ -32,6 +32,7 @@
 </template>
 <script>
     import * as request from "../../servers/request";
+
     export default {
         name: 'login',
         data() {
@@ -85,9 +86,10 @@
                         }
                         this.$http.post('login', data)
                             .then((response) => {
-                                if (response.status == 200 && response.data.success == true) {
+                                console.log(response);
+                                if (response.status == 'success' && response.code == 200) {
                                     sessionStorage.setItem(this.$Config.tokenKey, response.headers.authorization);
-                                    this.$router.push({path:'/'})
+                                    this.$router.push({path: '/'})
                                 }
                             })
 

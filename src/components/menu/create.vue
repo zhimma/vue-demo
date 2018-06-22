@@ -5,7 +5,12 @@
                 <el-input v-model="name" placeholder="菜单名称"></el-input>
             </el-form-item>
             <el-form-item label="父级菜单">
-                <el-input v-model="parent_id" placeholder="父级菜单"></el-input>
+                <el-select v-model="parent_id" placeholder="请选择父级菜单">
+                    <el-option
+                            v-for="menu in menus"
+                            :value="menu.name">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="菜单链接">
                 <el-input v-model="url" placeholder="菜单链接"></el-input>
@@ -28,7 +33,8 @@
                 name: '',
                 parent_id: '',
                 url: '',
-                status: this.visibleStatus
+                status: this.visibleStatus,
+                menus:''
             }
         },
         watch: {
@@ -53,7 +59,16 @@
             },
             handleClose(done) {
                 this.$emit('copyVisibleStatus', !this.status);
+            },
+            getParentMenus(){
+                this.$http.get("/menu/parent").then((response) => {
+                    console.log(response.data.data);
+//                    this.data.menus = response.data.menu;
+                });
             }
+        },
+        mounted() {
+            this.getParentMenus();
         }
     }
 </script>
