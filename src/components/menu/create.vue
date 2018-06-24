@@ -2,18 +2,20 @@
     <el-dialog :title="title" :visible.sync="visibleStatus" width="40%" :before-close="handleClose">
         <el-form ref="form" label-position="top">
             <el-form-item label="菜单名称">
-                <el-input v-model="name" placeholder="菜单名称"></el-input>
+                <el-input v-model="menuData.name" placeholder="菜单名称"></el-input>
             </el-form-item>
             <el-form-item label="父级菜单">
-                <el-select v-model="parent_id" placeholder="请选择父级菜单">
+                <el-select v-model="menuData.parent_id" placeholder="请选择父级菜单" style="width: 100%">
                     <el-option
                             v-for="menu in menus"
-                            :value="menu.name">
+                            :value="menu.id"
+                    >
+                        {{ menu.name }}
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="菜单链接">
-                <el-input v-model="url" placeholder="菜单链接"></el-input>
+                <el-input v-model="menuData.url" placeholder="菜单链接"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -30,11 +32,13 @@
         data() {
             return {
                 title: '添加菜单',
-                name: '',
-                parent_id: '',
-                url: '',
+                menuData: {
+                    name: '',
+                    parent_id: '',
+                    url: '',
+                },
                 status: this.visibleStatus,
-                menus:''
+                menus: '',
             }
         },
         watch: {
@@ -43,6 +47,7 @@
             },
             status(val) {
                 this.$emit('copyVisibleStatus', val)
+                this.getParentMenus();
             }
         },
         methods: {
@@ -50,25 +55,22 @@
                 this.$emit('copyVisibleStatus', !this.status);
             },
             submit() {
-                this.$emit('onSubmit', {
-                    title: '添加菜单',
-                    name: '',
-                    parent_id: '',
-                    url: ''
-                });
+                this.$emit('onSubmit', this.menuData);
             },
             handleClose(done) {
                 this.$emit('copyVisibleStatus', !this.status);
             },
-            getParentMenus(){
+            getParentMenus() {
                 this.$http.get("/menu/parent").then((response) => {
-                    console.log(response.data.data);
-//                    this.data.menus = response.data.menu;
+                    this.menus = response.data.data;
                 });
             }
         },
-        mounted() {
-            this.getParentMenus();
-        }
+        /*mounted() {
+            console.log(this.visibleStatus);
+            if (this.visibleStatus) {
+                this.getParentMenus();
+            }
+        }*/
     }
 </script>

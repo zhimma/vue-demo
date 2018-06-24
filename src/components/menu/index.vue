@@ -92,8 +92,12 @@
                 console.log('search');
             },
             onSubmit(data) {
-                this.visibleStatus = !this.visibleStatus;
-                console.log(data);
+
+                this.$http.post("/menu" , data).then((response) => {
+                  if(response.code == 200){
+                      this.visibleStatus = !this.visibleStatus;
+                  }
+                })
             },
             copyVisibleStatus(status){
                 this.visibleStatus= status;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中

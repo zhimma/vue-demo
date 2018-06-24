@@ -87,7 +87,7 @@
                         this.$http.post('login', data)
                             .then((response) => {
                                 console.log(response);
-                                if (response.status == 'success' && response.code == 200) {
+                                if (response.status == '200') {
                                     sessionStorage.setItem(this.$Config.tokenKey, response.headers.authorization);
                                     this.$router.push({path: '/'})
                                 }
