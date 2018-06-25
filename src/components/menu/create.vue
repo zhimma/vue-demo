@@ -7,10 +7,12 @@
             <el-form-item label="父级菜单">
                 <el-select v-model="menuData.parent_id" placeholder="请选择父级菜单" style="width: 100%">
                     <el-option
-                            v-for="menu in menus"
+                            v-for="(menu, index) in menus"
+                            :label="menu.name"
                             :value="menu.id"
+                            :key="index"
+
                     >
-                        {{ menu.name }}
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -47,6 +49,11 @@
             },
             status(val) {
                 this.$emit('copyVisibleStatus', val)
+                this.menuData = {
+                    name: '',
+                    parent_id: '',
+                    url: '',
+                }
                 this.getParentMenus();
             }
         },
@@ -65,12 +72,6 @@
                     this.menus = response.data.data;
                 });
             }
-        },
-        /*mounted() {
-            console.log(this.visibleStatus);
-            if (this.visibleStatus) {
-                this.getParentMenus();
-            }
-        }*/
+        }
     }
 </script>

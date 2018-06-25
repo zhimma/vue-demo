@@ -25,31 +25,38 @@
                     <el-button type="primary" @click="onSearch">查询</el-button>
                 </el-form-item>
             </el-form>
+
         </el-col>
         <el-col :span="20" class="p-b-50">
             <el-button type="default" @click="createMenu" style="float: right">添加菜单</el-button>
         </el-col>
-        <create-menu :visibleStatus="visibleStatus" @copyVisibleStatus="copyVisibleStatus" @onSubmit="onSubmit" ></create-menu>
+        <create-menu :visibleStatus="visibleStatus" @copyVisibleStatus="copyVisibleStatus"
+                     @onSubmit="onSubmit"></create-menu>
         <el-col :span="20">
-            <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%">
-                <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="地址">
-                </el-table-column>
-            </el-table>
+            <el-collapse v-for="(menu, index) in menusData" :key="index">
+                <el-collapse-item :title="menu.name" name="1">
+                    <el-table
+                            v-if="menu._child"
+                            :data="menu._child"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="name"
+                                label="菜单名称"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="url"
+                                label="菜单链接"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="icon"
+                                label="菜单图标">
+                        </el-table-column>
+                    </el-table>
+                </el-collapse-item>
+            </el-collapse>
         </el-col>
     </el-row>
 </template>
@@ -60,51 +67,56 @@
         name: 'menuPage',
         data() {
             return {
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
+                menusData: {},
+                childMenuData: [],
+                childMenuDatas: [{
+                    "id": 2,
+                    "parent_id": 1,
+                    "name": "菜单管理",
+                    "url": "/menu",
+                    "icon": "fa",
+                    "status": 1,
+                    "created_at": null,
+                    "updated_at": null
                 }],
                 formInline: {
                     user: '',
                     region: ''
                 },
-                visibleStatus:false,
+                title: '',
+                visibleStatus: false,
             }
         },
         components: {
             createMenu,
+        },
+        watch: {
+            childMenuData(val) {
+                console.log(val)
+            }
         },
         methods: {
             onSearch() {
                 console.log('search');
             },
             onSubmit(data) {
-
-                this.$http.post("/menu" , data).then((response) => {
-                  if(response.code == 200){
-                      this.visibleStatus = !this.visibleStatus;
-                  }
+                this.$http.post("/menu", data).then((response) => {
+                    if (response.data.code == 200) {
+                        this.visibleStatus = !this.visibleStatus;
+                        this.$notify({
+                            title: '菜单添加结果',
+                            message: '菜单添加成功',
+                            type: 'success'
+                        });
+                    }
                 })
             },
-            copyVisibleStatus(status){
-                this.visibleStatus= status;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
+            copyVisibleStatus(status) {
+                this.visibleStatus = status;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
             },
             getMenus() {
-                this.$http.get('/me').then((response => {
-                    console.log(response);
+                this.$http.get('/menu').then((response => {
+                    this.menusData = response.data.data
                 }))
             },
             createMenu() {
