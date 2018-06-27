@@ -3,14 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Http from './until/http'
 import store from './vuex'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 import Config from './config';
-import Http from './until/http'
 Vue.prototype.$Config = Config;
+Vue.prototype.$http = Http;
 Vue.use(ElementUI);
-Vue.use(Http);
 
 router.beforeEach((to, from, next) => {
     if (!sessionStorage.getItem(Config.tokenKey) && to.path != '/login') {
