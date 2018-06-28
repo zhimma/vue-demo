@@ -41,11 +41,28 @@
         methods: {
             cancel() {
                 this.$store.state.menu.childMenuCreateStatus = false
+                this.menuChildData = {
+                    name: '',
+                    url: '',
+                    icon: '',
+                    sort: 0,
+                    parent_id: this.$store.state.menu.parent_id
+                }
             },
             submit() {
                 this.menuChildData.parent_id = this.$store.state.menu.parent_id;
                 this.$store.dispatch('storeMenu', this.menuChildData);
+                var self = this;
+                setTimeout(function (self) {
+                    self.menuChildData = {
+                        name: '',
+                        icon: '',
+                        sort: 0,
+                        parent_id: self.$store.state.menu.parent_id
+                    }
+                }, 500, self);
             }
-        }
+        },
+
     }
 </script>

@@ -48,10 +48,26 @@
         methods: {
             cancel() {
                 this.$store.state.menu.mainMenuCreateStatus = false
+                this.menuMainData = {
+                    name: '',
+                    icon: '',
+                    sort: 0,
+                    parent_id: this.$store.state.menu.parent_id
+                }
             },
             submit() {
                 this.menuMainData.parent_id = this.$store.state.menu.parent_id;
                 this.$store.dispatch('storeMenu', this.menuMainData);
+                var self = this;
+                setTimeout(function (self) {
+                    self.menuMainData = {
+                        name: '',
+                        icon: '',
+                        sort: 0,
+                        parent_id: self.$store.state.menu.parent_id
+                    }
+                }, 500, self);
+
             }
         }
     }
