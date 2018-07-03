@@ -85,15 +85,6 @@
                             password: this.loginForm.password,
                         }
                         this.$store.dispatch('login', data);
-                        /*this.$http.post('login', data)
-                            .then((response) => {
-                                console.log(response);
-                                if (response.status == '200') {
-                                    sessionStorage.setItem(this.$Config.tokenKey, response.headers.authorization);
-                                    this.$router.push({path: '/'})
-                                }
-                            })*/
-
                     } else {
                         console.log('error submit!!');
                         return false;

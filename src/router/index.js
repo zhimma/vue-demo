@@ -1,27 +1,51 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Layout from '@/components/layout';
-import Index from '@/components/index/index';
-import menuPage from '@/components/Menu/index';
-import systemSetting from '@/components/system/setting';
-import login from '@/components/login/login';
 
 Vue.use(Router);
-const routes = [
+let baseRoute = [
     {
         path: '/',
-        component: Layout,
+        component: (resolve) => require(['../components/layout.vue'], resolve),
+        redirect: '/menu',
+        hidden: true,
         children: [
-            {path: '/index', component: Index, name: 'index', class: 'fa-line-chart'},
-            {path: '/menu', component: menuPage, name: 'menu', class: 'fa-line-chart'},
-            {path: '/system-setting', component: systemSetting, name: 'systemSetting', class: 'fa-line-chart'},
+            {
+                path: '/index',
+                component: (resolve) => require(['../components/Index/index.vue'], resolve),
+                name: 'index',
+                class: 'fa-line-chart'
+            },
+            {
+                path: '/menu',
+                component: (resolve) => require(['../components/Menu/index.vue'], resolve),
+                name: 'menu',
+                class: 'fa-line-chart'
+            },
+            {
+                path: '/system-setting',
+                component: (resolve) => require(['../components/system/setting.vue'], resolve),
+                name: 'systemSetting',
+                class: 'fa-line-chart'
+            },
         ]
     },
     {
         path: '/login',
-        component: login,
+        component: (resolve) => require(['../components/login/login.vue'], resolve),
+        hidden: true
     }
 ];
-export default new Router({
-    routes
-})
+let router = new Router({
+    routes: baseRoute
+});
+router.beforeEach((to, from, next) => {
+    if (!sessionStorage.getItem('Authorization') && to.path != '/login') {
+        next({path: '/login'});
+    } else {
+         /*var leftMenu = JSON.parse(sessionStorage.getItem('Menus'));
+         console.log(leftMenu);*/
+         // router.addRoutes(leftMenu);
+        next();
+    }
+});
+export default router;

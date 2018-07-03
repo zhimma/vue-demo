@@ -25,7 +25,8 @@ const store = new Vuex.Store({
                 sort: 0,
                 parent_id: 0
             }
-        }
+        },
+        leftMenu: ''
     },
     mutations: {
         changeMainMenuStatus(state, parent_id) {
@@ -44,7 +45,7 @@ const store = new Vuex.Store({
         },
         menuList(state, list) {
             state.menu.menuList = list
-        },
+        }
     },
     actions: {
         login(context, data) {
@@ -53,9 +54,7 @@ const store = new Vuex.Store({
                     console.log(response);
                     if (response.status == '200') {
                         sessionStorage.setItem(Config.tokenKey, response.headers.authorization);
-                        console.log(JSON.stringify(response.data.data));
                         sessionStorage.setItem('Menus', JSON.stringify(response.data.data));
-                        // Router.addRouter(JSON.stringify(response.data.data));
                         Router.push({path: '/menu'})
                     }
                 })
